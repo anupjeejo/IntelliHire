@@ -5,6 +5,9 @@ import ErrorHandler from "../utils/errorHandler.js";
 import bcrypt from 'bcrypt';
 import axios from 'axios';
 import jwt from "jsonwebtoken";
+import { publishToTopic } from "../producer.js";
+import { forgotPasswordTemplate } from "../templete.js";
+import { redisClient } from "../index.js";
 export const registerUser = TryCatch(async (req, res, next) => {
     const { name, email, password, phoneNumber, role, bio } = req.body;
     console.log("role: ", role);
@@ -150,4 +153,72 @@ export const loginUser = TryCatch(async (req, res, next) => {
         userObject,
         token,
     });
+});
+export const forgotPassword = TryCatch(async (req, res, next) => {
+    const { email } = req.body;
+    console.log("inside forgotPassword");
+    console.log("email: ", email);
+    if (!email) {
+        throw new ErrorHandler(400, "email is required");
+    }
+    const users = await sql `SELECT user_id, email FROM users WHERE email = ${email}`;
+    if (users.length === 0) {
+        return res.json({
+            message: "User not found",
+        });
+    }
+    const user = users[0];
+    console.log("user: ", user);
+    const resetToken = jwt.sign({
+        email: user.email,
+        type: "reset",
+    }, process.env.JWT_SEC, { expiresIn: "15m" });
+    const resetLink = `${process.env.Frontend_Url}/reset/${resetToken}`;
+    console.log("resetLink: ", resetLink);
+    console.log("calling redisClient");
+    await redisClient.set(`forgot:${email}`, resetToken, {
+        EX: 900,
+    });
+    console.log("called success redisClient");
+    const message = {
+        to: email,
+        subject: "RESET Your Password - IntelliHire",
+        html: forgotPasswordTemplate(resetLink),
+    };
+    console.log("Calling publishToTopic");
+    publishToTopic("send-mail", message).catch((error) => {
+        console.error("failed to send message", error);
+    });
+    console.log("called publishToTopic");
+    res.json({
+        message: "If that email exists, we have sent a reset link",
+    });
+});
+export const resetPassword = TryCatch(async (req, res, next) => {
+    const { token } = req.params;
+    const { password } = req.body;
+    let decoded;
+    try {
+        decoded = jwt.verify(token, process.env.JWT_SEC);
+    }
+    catch (error) {
+        throw new ErrorHandler(400, "Expired token");
+    }
+    if (decoded.type !== "reset") {
+        throw new ErrorHandler(400, "Invalid token type");
+    }
+    const email = decoded.email;
+    const storedToken = await redisClient.get(`forgot:${email}`);
+    if (!storedToken || storedToken !== token) {
+        throw new ErrorHandler(400, "token has been expired");
+    }
+    const users = await sql `SELECT user_id FROM users WHERE email = ${email}`;
+    if (users.length === 0) {
+        throw new ErrorHandler(404, "User not found");
+    }
+    const user = users[0];
+    const hashPassword = await bcrypt.hash(password, 10);
+    await sql `UPDATE users SET password = ${hashPassword} WHERE user_id = ${user.user_id}`;
+    await redisClient.del(`forgot:${email}`);
+    res.json({ message: "Password changed successfully" });
 });
