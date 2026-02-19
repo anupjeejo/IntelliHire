@@ -102,7 +102,7 @@ export const applicationStatusUpdateTemplate = (jobTitle: string) => {
                     <tr> 
                         <td class="footer"> 
                             <p class="footer-text"> 
-                                © 2025 IntelliHire. All rights reserved. 
+                                © 2026 IntelliHire. All rights reserved. 
                             </p> 
                             <p class="footer-text"> 
                                 This is an automated message, please do not reply. 
