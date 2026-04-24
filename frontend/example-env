@@ -1,0 +1,6 @@
+RAZORPAY_KEY =
+UTILS_SERVICE = "http://localhost:5001";
+AUTH_SERVICE = "http://localhost:5000";
+USER_SERVICE = "http://localhost:5002";
+JOB_SERVICE = "http://localhost:5003";
+PAYMENT_SERVICE = "http://localhost:5004";
