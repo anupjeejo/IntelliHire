@@ -55,7 +55,7 @@ export const paymentVerification = TryCatch(
                   + "|" + razorpay_payment_id;
 
     const expectedSignature = crypto
-      .createHmac("sha256", process.env.Razorpay_Secret as string)
+      .createHmac("sha256", process.env.RAZORPAY_SECRET as string)
       .update(body)
       .digest("hex");
 

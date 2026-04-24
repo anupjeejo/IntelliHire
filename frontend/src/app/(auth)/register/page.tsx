@@ -1,5 +1,5 @@
 "use client";
-import { auth_service, useAppData } from "@/context/AppContext";
+import { UTILS_SERVICE, useAppData } from "@/context/AppContext";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import React, { FormEvent, useState } from "react";
@@ -48,7 +48,7 @@ const RegisterPage = () => {
     }
     try {
       const { data } = await axios.post(
-        `${auth_service}/api/auth/register`,
+        `${UTILS_SERVICE}/api/auth/register`,
         formData
       );
 

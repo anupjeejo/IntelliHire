@@ -6,11 +6,11 @@ import toast, { Toaster } from "react-hot-toast";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-export const utils_service = "http://35.154.186.96:5001";
-export const auth_service = "http://35.154.186.96:5000";
-export const user_service = "http://35.154.186.96:5002";
-export const job_service = "http://35.154.186.96:5003";
-export const payment_service = "http://35.154.186.96:5004";
+export const UTILS_SERVICE    = process.env.UTILS_SERVICE;
+export const AUTH_SERVICE     = process.env.AUTH_SERVICE;
+export const USER_SERVICE     = process.env.USER_SERVICE;
+export const JOB_SERVICE      = process.env.JOB_SERVICE;
+export const PAYMENT_SERVICE  = process.env.PAYMENT_SERVICE;
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -24,7 +24,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   async function fetchUser() {
     try {
-      const { data } = await axios.get(`${user_service}/api/user/me`, {
+      const { data } = await axios.get(`${USER_SERVICE}/api/user/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,7 +44,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setLoading(true);
     try {
       const { data } = await axios.put(
-        `${user_service}/api/user/update/pic`,
+        `${USER_SERVICE}/api/user/update/pic`,
         fromData,
         {
           headers: {
@@ -66,7 +66,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setLoading(true);
     try {
       const { data } = await axios.put(
-        `${user_service}/api/user/update/resume`,
+        `${USER_SERVICE}/api/user/update/resume`,
         fromData,
         {
           headers: {
@@ -88,7 +88,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setBtnLoading(true);
     try {
       const { data } = await axios.put(
-        `${user_service}/api/user/update/profile`,
+        `${USER_SERVICE}/api/user/update/profile`,
         { name, phoneNumber, bio },
         {
           headers: {
@@ -119,7 +119,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setBtnLoading(true);
     try {
       const { data } = await axios.post(
-        `${user_service}/api/user/skill/add`,
+        `${USER_SERVICE}/api/user/skill/add`,
         { skillName: skill },
         {
           headers: {
@@ -140,7 +140,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   async function removeSkill(skill: string) {
     try {
       const { data } = await axios.put(
-        `${user_service}/api/user/skill/delete`,
+        `${USER_SERVICE}/api/user/skill/delete`,
         { skillName: skill },
         {
           headers: {
@@ -159,7 +159,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setBtnLoading(true);
     try {
       const { data } = await axios.post(
-        `${user_service}/api/user/apply/job`,
+        `${USER_SERVICE}/api/user/apply/job`,
         { job_id },
         {
           headers: {
@@ -182,7 +182,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   async function fetchApplications() {
     try {
       const { data } = await axios.get(
-        `${user_service}/api/user/application/all`,
+        `${USER_SERVICE}/api/user/application/all`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

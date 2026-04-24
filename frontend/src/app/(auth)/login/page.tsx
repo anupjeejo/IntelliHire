@@ -1,5 +1,5 @@
 "use client";
-import { auth_service, useAppData } from "@/context/AppContext";
+import { UTILS_SERVICE, useAppData } from "@/context/AppContext";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import React, { FormEvent, useState } from "react";
@@ -29,7 +29,7 @@ const LoginPage = () => {
 
     setBtnLoading(true);
     try {
-      const { data } = await axios.post(`${auth_service}/api/auth/login`, {
+      const { data } = await axios.post(`${UTILS_SERVICE}/api/auth/login`, {
         email,
         password,
       });

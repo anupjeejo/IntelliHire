@@ -6,7 +6,7 @@ import { createClient } from "redis";
 dotenv.config();
 
 export const redisClient = createClient({
-  url: process.env.Redis_url,
+  url: process.env.REDIS_URL,
 });
 
 redisClient

@@ -3,7 +3,7 @@ import { Job } from "@/type";
 import React, { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { job_service } from "@/context/AppContext";
+import { JOB_SERVICE } from "@/context/AppContext";
 import { Button } from "@/components/ui/button";
 import { Briefcase, Filter, MapPin, Search, X } from "lucide-react";
 import Loading from "@/components/loading";
@@ -43,7 +43,7 @@ const JobsPage = () => {
     setLoading(true);
     try {
       const { data } = await axios.get(
-        `${job_service}/api/job/all?title=${title}&location=${location}`,
+        `${JOB_SERVICE}/api/job/all?title=${title}&location=${location}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

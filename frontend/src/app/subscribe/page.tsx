@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { payment_service, useAppData } from "@/context/AppContext";
+import { PAYMENT_SERVICE, useAppData } from "@/context/AppContext";
 import toast from "react-hot-toast";
 import Loading from "@/components/loading";
 import { Card } from "@/components/ui/card";
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 
 const SubscriptionPage = () => {
   const razorpayLoaded = useRazorpay();
-
+  
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ const SubscriptionPage = () => {
     const {
       data: { order },
     } = await axios.post(
-      `${payment_service}/api/payment/checkout`,
+      `${PAYMENT_SERVICE}/api/payment/checkout`,
       {},
       {
         headers: {
@@ -36,7 +36,7 @@ const SubscriptionPage = () => {
     );
 
     const options = {
-      key: "rzp_test_RaL8PDo9YBejEW", // Replace with your Razorpay key_id
+      key: process.env.RAZORPAY_KEY, // Replace with your Razorpay key_id
       amount: order.id, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: "INR",
       name: "Intelli Hire",
@@ -48,7 +48,7 @@ const SubscriptionPage = () => {
 
         try {
           const { data } = await axios.post(
-            `${payment_service}/api/payment/verify`,
+            `${PAYMENT_SERVICE}/api/payment/verify`,
             { 
               razorpay_order_id, 
               razorpay_payment_id, 

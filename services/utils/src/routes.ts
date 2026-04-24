@@ -33,6 +33,8 @@ router.post("/career", async (req, res) => {
   try {
     const { skills } = req.body;
 
+    //console.log("skills: ", skills)
+    
     if (!skills) {
       return res.status(400).json({
         message: "Skills Required",

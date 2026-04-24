@@ -2,7 +2,7 @@
 import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { job_service, useAppData } from "@/context/AppContext";
+import { JOB_SERVICE, useAppData } from "@/context/AppContext";
 import { Application, Job } from "@/type";
 import axios from "axios";
 import {
@@ -45,7 +45,7 @@ const JobPage = () => {
 
   async function fetchSingleJob() {
     try {
-      const { data } = await axios.get(`${job_service}/api/job/${id}`);
+      const { data } = await axios.get(`${JOB_SERVICE}/api/job/${id}`);
       setJob(data);
     } catch (error) {
       console.log(error);
@@ -65,7 +65,7 @@ const JobPage = () => {
   async function fetchJobApplications() {
     try {
       const { data } = await axios.get(
-        `${job_service}/api/job/application/${id}`,
+        `${JOB_SERVICE}/api/job/application/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -99,7 +99,7 @@ const JobPage = () => {
 
     try {
       const { data } = await axios.put(
-        `${job_service}/api/job/application/update/${id}`,
+        `${JOB_SERVICE}/api/job/application/update/${id}`,
         { status: value },
         {
           headers: {

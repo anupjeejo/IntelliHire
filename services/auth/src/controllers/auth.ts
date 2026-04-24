@@ -228,7 +228,7 @@ export const forgotPassword = TryCatch(async (req, res, next) => {
     { expiresIn: "15m" }
   );
 
-  const resetLink = `${process.env.Frontend_Url}/reset/${resetToken}`;
+  const resetLink = `${process.env.FRONTEND_URL}/reset/${resetToken}`;
   console.log("resetLink: ", resetLink)
 
   console.log("calling redisClient")

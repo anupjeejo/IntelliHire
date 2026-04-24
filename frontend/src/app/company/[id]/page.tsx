@@ -2,7 +2,7 @@
 import { useParams } from "next/navigation";
 import Cookies from "js-cookie";
 import React, { useEffect, useRef, useState } from "react";
-import { job_service, useAppData } from "@/context/AppContext";
+import { JOB_SERVICE, useAppData } from "@/context/AppContext";
 import { Company, Job } from "@/type";
 import axios from "axios";
 import Loading from "@/components/loading";
@@ -58,7 +58,7 @@ const CompanyPage = () => {
   async function fetchCompany() {
     try {
       setLoading(true);
-      const { data } = await axios.get(`${job_service}/api/job/company/${id}`);
+      const { data } = await axios.get(`${JOB_SERVICE}/api/job/company/${id}`);
       setCompany(data);
     } catch (error) {
       console.log(error);
@@ -117,7 +117,7 @@ const CompanyPage = () => {
         company_id: id,
       };
 
-      await axios.post(`${job_service}/api/job/new`, jobData, {
+      await axios.post(`${JOB_SERVICE}/api/job/new`, jobData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -139,7 +139,7 @@ const CompanyPage = () => {
     if (confirm("Are you sure you want to delete this job?")) {
       setBtnLoading(true);
       try {
-        await axios.delete(`${job_service}/api/job/${jobId}`, {
+        await axios.delete(`${JOB_SERVICE}/api/job/${jobId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -193,7 +193,7 @@ const CompanyPage = () => {
       };
 
       await axios.put(
-        `${job_service}/api/job/${selectedJob.job_id}`,
+        `${JOB_SERVICE}/api/job/${selectedJob.job_id}`,
         updateData,
         {
           headers: {
